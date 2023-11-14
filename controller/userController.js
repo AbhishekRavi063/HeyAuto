@@ -110,8 +110,37 @@ const findCabsByLocation = async (req, res) => {
   }
 };
 
-module.exports = { findCabsByLocation };
+// ...
+
+// Function to update user details by ID
+const updateUserDetails = async (req, res) => {
+  try {
+    const userId = req.params.id; // Get the user ID from the request parameters
+    const { name, number, email, age } = req.body; // Get updated details from the request body
+
+    if (!name || !number || !email || !age) {
+      return res.status(400).json({ error: 'Required fields are missing.' });
+    }
+
+    // Update the user document in the 'users' collection
+    const userRef = userCollection.doc(userId);
+    await userRef.update({
+      name,
+      number,
+      email,
+      age,
+    });
+
+    res.status(200).json({ message: 'User details updated successfully' });
+  } catch (error) {
+    console.error('Error updating user details:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+module.exports = { createUser, getUserDetails, deleteUser, findCabsByLocation, updateUserDetails };
 
 
 
-module.exports = { createUser,getUserDetails ,deleteUser,findCabsByLocation};;
+
+
